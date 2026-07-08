@@ -13,7 +13,7 @@ import pandas as pd
 
 PROCESS_TYPES = ("DY", "SIDIS", "G2", "D2")
 
-# ── Required columns ───────────────────────────────────────────────────────────
+# -- Required columns -----------------------------------------------------------
 
 _COMMON_REQUIRED = [
     "id", "xSec", "s", "Q_min", "Q_max", "thFactor",
@@ -29,7 +29,7 @@ _EXTRA_REQUIRED = {
 
 REQUIRED = {pt: _COMMON_REQUIRED + _EXTRA_REQUIRED[pt] for pt in PROCESS_TYPES}
 
-# ── Optional columns with defaults ────────────────────────────────────────────
+# -- Optional columns with defaults --------------------------------------------
 # Ordered list of (column, value_or_callable).
 # Callables receive the current DataFrame and return a Series.
 # Order matters: later entries may depend on earlier computed columns.
@@ -73,7 +73,7 @@ _WEIGHT_COLUMNS = {
     "D2":    [],
 }
 
-# ── Internal helpers ───────────────────────────────────────────────────────────
+# -- Internal helpers -----------------------------------------------------------
 
 def _fill_defaults(df, processType):
     df = df.copy()
@@ -92,7 +92,7 @@ def _check_bin_order(df, col_min, col_max):
         )
 
 
-# ── Public API ─────────────────────────────────────────────────────────────────
+# -- Public API -----------------------------------------------------------------
 
 def validate(df, processType):
     """

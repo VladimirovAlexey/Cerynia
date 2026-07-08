@@ -43,7 +43,7 @@ class DataSet:
             dupes = self.df.loc[self.df["id"].duplicated(keep=False), "id"].unique().tolist()
             raise ValueError(f"DataSet '{name}' contains duplicate point ids: {dupes}")
             
-    # ── Point-by-point construction ───────────────────────────────────────────
+    # -- Point-by-point construction -------------------------------------------
 
     @classmethod
     def empty(cls, processType, name="", comment="", reference="",
@@ -88,7 +88,7 @@ class DataSet:
         self._prepared = False
 
 
-    # ── Representation ────────────────────────────────────────────────────────
+    # -- Representation --------------------------------------------------------
 
     def __repr__(self):
         state = "prepared" if self._prepared else "unprepared"
@@ -106,7 +106,7 @@ class DataSet:
             return DataMultiSet([self] + list(other))
         return NotImplemented
 
-    # ── Properties ────────────────────────────────────────────────────────────
+    # -- Properties ------------------------------------------------------------
 
     @property
     def numberOfPoints(self):
@@ -132,7 +132,7 @@ class DataSet:
                 f"DataSet '{self.name}' is not prepared. Call prepare() first."
             )
 
-    # ── Lifecycle ─────────────────────────────────────────────────────────────
+    # -- Lifecycle -------------------------------------------------------------
 
     def prepare(self):
         """
@@ -234,7 +234,7 @@ class DataSet:
             normalizationMethod = self.normalizationMethod,
         )
 
-    # ── Theory matching ───────────────────────────────────────────────────────
+    # -- Theory matching -------------------------------------------------------
 
     def match(self, theory):
         """
@@ -265,7 +265,7 @@ class DataSet:
 
         raise ValueError(f"Unknown normalizationMethod: {self.normalizationMethod!r}")
 
-    # ── Chi2 and diagnostics ──────────────────────────────────────────────────
+    # -- Chi2 and diagnostics --------------------------------------------------
 
     def chi2(self, theory):
         """
@@ -327,7 +327,7 @@ class DataSet:
         Lt = solve_triangular(self._L, theory,                 lower=True)
         return float(np.dot(Ls, Lt) / np.dot(Lt, Lt))
 
-    # ── Replica generation ────────────────────────────────────────────────────
+    # -- Replica generation ----------------------------------------------------
 
     def generate_replica(self, include_norm_in_V=True, rng=None):
         """
@@ -380,7 +380,7 @@ class DataSet:
             normalizationMethod = self.normalizationMethod,
         ).prepare()
 
-    # ── Information ───────────────────────────────────────────────────────────
+    # -- Information -----------------------------------------------------------
 
     def info(self):
         """Print a human-readable summary of the dataset."""
@@ -398,7 +398,7 @@ class DataSet:
         print(f"Normalized   : {norm_str}")
         print(f"Prepared     : {self._prepared}")
 
-    # ── I/O ───────────────────────────────────────────────────────────────────
+    # -- I/O -------------------------------------------------------------------
 
     @classmethod
     def from_csv(cls, path):

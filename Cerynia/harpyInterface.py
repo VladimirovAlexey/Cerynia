@@ -22,7 +22,7 @@ from .DataSet      import DataSet
 from .DataMultiSet import DataMultiSet
 
 
-# ── Column extraction helpers ─────────────────────────────────────────────────
+# -- Column extraction helpers -------------------------------------------------
 
 def _process_list(df, processType):
     """Process code list per point.
@@ -45,7 +45,7 @@ def _zero_size_bins(df, col):
     return [[v, v] for v in df[col]]
 
 
-# ── Core cross-section computation ────────────────────────────────────────────
+# -- Core cross-section computation --------------------------------------------
 
 def _xsec_df(df, processType, method):
     """
@@ -136,7 +136,7 @@ def _xsec_df(df, processType, method):
     )
 
 
-# ── Public API ────────────────────────────────────────────────────────────────
+# -- Public API ----------------------------------------------------------------
 
 def xsec(data, method="default"):
     """
@@ -173,7 +173,7 @@ def chi2(data, method="default"):
     return data.chi2(YY)
 
 
-# ── Diagnostic printing ───────────────────────────────────────────────────────
+# -- Diagnostic printing -------------------------------------------------------
 
 def print_chi2_table(data, method="default", decompose=False, sys_shift=True):
     """
@@ -261,7 +261,7 @@ def print_per_point_chi2(data, method="default", min_chi2=0.):
 
     for ds, th in sets_and_theory:
         if isinstance(data, DataMultiSet):
-            print(f"\n── {ds.name} ──")
+            print(f"\n-- {ds.name} --")
 
         variances = ds.df[ds._uncorr_cols].pow(2).sum(axis=1).values
         dchi2     = (ds.df["xSec"].values - th) ** 2 / variances

@@ -55,14 +55,14 @@ class DataMultiSet:
 
         self.numberOfPoints = i
 
-    # ── Representation ────────────────────────────────────────────────────────
+    # -- Representation --------------------------------------------------------
 
     def __repr__(self):
         state = "prepared" if all(s._prepared for s in self._sets) else "unprepared"
         return (f"<DataMultiSet: {len(self._sets)} sets, "
                 f"{self.processType}, {self.numberOfPoints} points, {state}>")
 
-    # ── Sequence interface ────────────────────────────────────────────────────
+    # -- Sequence interface ----------------------------------------------------
 
     def __len__(self):
         return len(self._sets)
@@ -88,14 +88,14 @@ class DataMultiSet:
             return DataMultiSet(self._sets + other._sets)
         return NotImplemented
 
-    # ── Convenience ───────────────────────────────────────────────────────────
+    # -- Convenience -----------------------------------------------------------
 
     @property
     def df(self):
         """Concatenated DataFrame of all sets — useful for inspection and theory calls."""
         return pd.concat([s.df for s in self._sets], ignore_index=True)
 
-    # ── Lifecycle ─────────────────────────────────────────────────────────────
+    # -- Lifecycle -------------------------------------------------------------
 
     def prepare(self):
         """Call prepare() on all constituent DataSets. Returns self for chaining."""
@@ -103,13 +103,13 @@ class DataMultiSet:
             s.prepare()
         return self
 
-    # ── Internal ──────────────────────────────────────────────────────────────
+    # -- Internal --------------------------------------------------------------
 
     def _slice(self, vector, k):
         """Extract the portion of a flat vector belonging to set k."""
         return vector[self._i1[k]:self._i2[k]]
 
-    # ── Theory matching ───────────────────────────────────────────────────────
+    # -- Theory matching -------------------------------------------------------
 
     def match(self, theory):
         """
@@ -121,7 +121,7 @@ class DataMultiSet:
                    for k in range(len(self._sets))]
         return np.concatenate(matched)
 
-    # ── Chi2 and diagnostics ──────────────────────────────────────────────────
+    # -- Chi2 and diagnostics --------------------------------------------------
 
     def chi2(self, theory):
         """
@@ -160,7 +160,7 @@ class DataMultiSet:
         return [self._sets[k].decompose_chi2(self._slice(theory, k))
                 for k in range(len(self._sets))]
 
-    # ── Replica generation ────────────────────────────────────────────────────
+    # -- Replica generation ----------------------------------------------------
 
     def generate_replica(self, include_norm_in_V=True, rng=None):
         """
@@ -176,7 +176,7 @@ class DataMultiSet:
         return DataMultiSet([s.generate_replica(include_norm_in_V, rng)
                              for s in self._sets])
 
-    # ── Information ───────────────────────────────────────────────────────────
+    # -- Information -----------------------------------------------------------
 
     def info(self):
         """Print a summary of all constituent DataSets."""
