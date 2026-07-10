@@ -1,0 +1,9 @@
+# name: E154_d2
+# comment: Taken from the text after (6)
+# reference: hep-ex/9705017
+# processType: D2
+# isNormalized: False
+# normalizationMethod: integral
+# normErr: 
+id,ps_def,h_1,proc_id,s,Q_min,Q_max,Q_avg,thFactor,xSec,uncorrErr_0,uncorrErr_1
+E154_d2.0,1,1,101,91.49064399999999,1.3973665961010275,2.3973665961010275,1.8973665961010275,1.0,-0.004,0.038,0.005

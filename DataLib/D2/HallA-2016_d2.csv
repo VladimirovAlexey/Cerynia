@@ -1,0 +1,10 @@
+# name: HallA-2016_d2
+# comment: Taken from table X
+# reference: arxiv:1603.03612
+# processType: D2
+# isNormalized: False
+# normalizationMethod: integral
+# normErr: 
+id,ps_def,h_1,proc_id,s,Q_min,Q_max,Q_avg,thFactor,xSec,uncorrErr_0,uncorrErr_1,uncorrErr_2
+HallA-2016_d2.0,1,1,101,11.629324,1.2916472867168918,2.2916472867168918,1.7916472867168918,1.0,-0.00421,0.00079,0.00082,8e-05
+HallA-2016_d2.1,1,1,101,11.629324,1.578460969082653,2.578460969082653,2.078460969082653,1.0,-0.00035,0.00083,0.00069,7e-05

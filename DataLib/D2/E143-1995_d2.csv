@@ -1,0 +1,10 @@
+# name: E143-1995_d2
+# comment: Taken from table 5a
+# reference: hep-ex/9511013
+# processType: D2
+# isNormalized: False
+# normalizationMethod: integral
+# normErr: 
+id,ps_def,h_1,proc_id,s,Q_min,Q_max,Q_avg,thFactor,xSec,uncorrErr_0
+E143-1995_d2.0,1,1,100,55.283843999999995,1.7360679774997898,2.73606797749979,2.23606797749979,1.0,0.0054,0.005
+E143-1995_d2.1,1,1,102,55.283843999999995,1.7360679774997898,2.73606797749979,2.23606797749979,1.0,0.0039,0.0092

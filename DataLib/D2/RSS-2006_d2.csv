@@ -1,0 +1,9 @@
+# name: RSS-2006_d2
+# comment: Taken from text in the last page
+# reference: hep-exp/0608003
+# processType: D2
+# isNormalized: False
+# normalizationMethod: integral
+# normErr: 
+id,ps_def,h_1,proc_id,s,Q_min,Q_max,Q_avg,thFactor,xSec,uncorrErr_0,uncorrErr_1
+RSS-2006_d2.0,1,1,100,11.666844,0.640175425099138,1.640175425099138,1.140175425099138,1.0,0.0057,0.0009,0.0007

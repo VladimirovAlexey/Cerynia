@@ -1,0 +1,9 @@
+# name: star23.sivers.Z
+# comment: STAR AN for Z
+# reference: 2308.15496
+# processType: DY
+# isNormalized: False
+# normalizationMethod: integral
+# normErr: 0.014
+id,ps_def,h_1,h_2,proc_id,ps_def_weight,h_1_weight,h_2_weight,proc_id_weight,s,Q_min,Q_max,Q_avg,y_min,y_max,qT_min,qT_max,thFactor,includeCuts,cutParams_0,cutParams_1,cutParams_2,cutParams_3,xSec,uncorrErr_0,uncorrErr_1,y_avg,qT_avg
+star23.sivers.Z.0,1,1,1,10003,1,1,1,3,250000.0,73.0,114.0,91.19,-1.0,1.0,0.5,10.0,1.0,False,25.0,25.0,-1.0,1.0,0.056,0.081,0.05,0.0,5.25

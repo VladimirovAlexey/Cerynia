@@ -1,0 +1,9 @@
+# name: HallA-2004_d2
+# comment: Taken from (24)
+# reference: hep-ex/0405006
+# processType: D2
+# isNormalized: False
+# normalizationMethod: integral
+# normErr: 
+id,ps_def,h_1,proc_id,s,Q_min,Q_max,Q_avg,thFactor,xSec,uncorrErr_0
+HallA-2004_d2.0,1,1,101,11.629324,1.7360679774997898,2.73606797749979,2.23606797749979,1.0,0.0062,0.0028

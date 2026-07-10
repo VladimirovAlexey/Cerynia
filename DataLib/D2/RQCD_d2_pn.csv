@@ -1,0 +1,10 @@
+# name: RQCD_d2_pn
+# comment: Taken from table 4 for p and n combination (better not to use because there are no sea-part)
+# reference: arXiv:2111.08306
+# processType: D2
+# isNormalized: False
+# normalizationMethod: integral
+# normErr: 
+id,ps_def,h_1,proc_id,s,Q_min,Q_max,Q_avg,thFactor,xSec,uncorrErr_0,uncorrErr_1
+RQCD_d2_pn.0,1,1,100,4.0,1.95,2.05,2.0,2.0,0.0105,0.019,0.065
+RQCD_d2_pn.1,1,1,101,4.0,1.95,2.05,2.0,2.0,-0.0009,0.0014,0.0069

@@ -1,0 +1,9 @@
+# name: HERMES_d2
+# comment: Taken from text in the last page
+# reference: arxiv:1112.5584
+# processType: D2
+# isNormalized: False
+# normalizationMethod: integral
+# normErr: 
+id,ps_def,h_1,proc_id,s,Q_min,Q_max,Q_avg,thFactor,xSec,uncorrErr_0,uncorrErr_1
+HERMES_d2.0,1,1,100,52.657444,1.7360679774997898,2.73606797749979,2.23606797749979,1.0,0.0148,0.0096,0.0048

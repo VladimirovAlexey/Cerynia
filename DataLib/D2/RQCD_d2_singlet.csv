@@ -1,0 +1,10 @@
+# name: RQCD_d2_singlet
+# comment: Taken from table 4 for u-d and u+d quarks
+# reference: arXiv:2111.08306
+# processType: D2
+# isNormalized: False
+# normalizationMethod: integral
+# normErr: 
+id,ps_def,h_1,proc_id,s,Q_min,Q_max,Q_avg,thFactor,xSec,uncorrErr_0,uncorrErr_1
+RQCD_d2_singlet.0,1,1,11,4.0,1.95,2.05,2.0,2.0,0.034,0.004,0.011
+RQCD_d2_singlet.1,1,1,12,4.0,1.95,2.05,2.0,2.0,0.018,0.005,0.022

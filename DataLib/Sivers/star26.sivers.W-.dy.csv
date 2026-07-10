@@ -1,0 +1,11 @@
+# name: star26.sivers.W-.dy
+# comment: STAR AN for W- (differential in y)
+# reference: ????.????
+# processType: DY
+# isNormalized: False
+# normalizationMethod: integral
+# normErr: 0.014
+id,ps_def,h_1,h_2,proc_id,ps_def_weight,h_1_weight,h_2_weight,proc_id_weight,s,Q_min,Q_max,Q_avg,y_min,y_max,qT_min,qT_max,thFactor,includeCuts,cutParams_0,cutParams_1,cutParams_2,cutParams_3,xSec,uncorrErr_0,uncorrErr_1,y_avg,qT_avg
+star26.sivers.W-.dy.0,1,1,1,10005,1,1,1,5,250000.0,50.379999999999995,110.38,80.38,-0.7,-0.3,0.5,10.0,1.0,False,25.0,25.0,-1.0,1.0,-0.0618,0.1426,0.0692,-0.5,5.25
+star26.sivers.W-.dy.1,1,1,1,10005,1,1,1,5,250000.0,50.379999999999995,110.38,80.38,-0.3,0.3,0.5,10.0,1.0,False,25.0,25.0,-1.0,1.0,-0.0212,0.0965,0.0302,0.0,5.25
+star26.sivers.W-.dy.2,1,1,1,10005,1,1,1,5,250000.0,50.379999999999995,110.38,80.38,0.3,0.7,0.5,10.0,1.0,False,25.0,25.0,-1.0,1.0,0.0712,0.1517,0.0242,0.5,5.25

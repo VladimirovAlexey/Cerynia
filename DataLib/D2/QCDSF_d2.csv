@@ -1,0 +1,10 @@
+# name: QCDSF_d2
+# comment: Taken from text in page 3.)
+# reference: arXiv:2408.03621
+# processType: D2
+# isNormalized: False
+# normalizationMethod: integral
+# normErr: 
+id,ps_def,h_1,proc_id,s,Q_min,Q_max,Q_avg,thFactor,xSec,uncorrErr_0,uncorrErr_1
+QCDSF_d2.0,1,1,100,4.0,1.95,2.05,2.0,2.0,0.046,0.007,0.016
+QCDSF_d2.1,1,1,101,4.0,1.95,2.05,2.0,2.0,0.023,0.005,0.008

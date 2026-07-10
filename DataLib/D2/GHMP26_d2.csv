@@ -1,0 +1,9 @@
+# name: GHMP26_d2
+# comment: Taken from eqn.(30).)
+# reference: arXiv:2604.00143
+# processType: D2
+# isNormalized: False
+# normalizationMethod: integral
+# normErr: 
+id,ps_def,h_1,proc_id,s,Q_min,Q_max,Q_avg,thFactor,xSec,uncorrErr_0
+GHMP26_d2.0,1,1,11,4.0,1.95,2.05,2.0,1.0,0.0024,0.0046

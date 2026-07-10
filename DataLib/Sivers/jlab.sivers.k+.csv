@@ -1,0 +1,12 @@
+# name: jlab.sivers.k+
+# comment: JLab SSA-Sivers k+. The data MUST be evaluated at a point
+# reference: 1404.7204
+# processType: SIDIS
+# isNormalized: False
+# normalizationMethod: integral
+# normErr: 
+id,ps_def,h_1,h_2,proc_id,ps_def_weight,h_1_weight,h_2_weight,proc_id_weight,s,Q_min,Q_max,Q_avg,x_min,x_max,x_avg,z_min,z_max,z_avg,pT_min,pT_max,pT_avg,M_target,M_product,thFactor,includeCuts,cutParams_0,cutParams_1,cutParams_2,cutParams_3,xSec,uncorrErr_0,uncorrErr_1
+jlab.sivers.k+.0,1,11,2,12001,1,11,2,2001,11.948244,1.0,1.7,1.1357816691600546,0.1,0.4,0.137,0.45,0.6,0.48,0.1,0.6,0.46,0.938,0.494,1.0,False,0.1,0.95,2.3,10000.0,0.078,0.13,0.017
+jlab.sivers.k+.1,1,11,2,12001,1,11,2,2001,11.948244,1.0,1.7,1.3,0.1,0.4,0.19,0.45,0.6,0.51,0.1,0.6,0.4,0.938,0.494,1.0,False,0.1,0.95,2.3,10000.0,-0.019,0.083,0.0065
+jlab.sivers.k+.2,1,11,2,12001,1,11,2,2001,11.948244,1.0,1.7,1.452583904633395,0.1,0.4,0.25,0.45,0.6,0.53,0.1,0.6,0.33,0.938,0.494,1.0,False,0.1,0.95,2.3,10000.0,0.0074,0.063,0.006
+jlab.sivers.k+.3,1,11,2,12001,1,11,2,2001,11.948244,1.0,1.7,1.61245154965971,0.1,0.4,0.324,0.45,0.6,0.56,0.1,0.6,0.26,0.938,0.494,1.0,False,0.1,0.95,2.3,10000.0,-0.019,0.07,0.006

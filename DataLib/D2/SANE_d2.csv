@@ -1,0 +1,10 @@
+# name: SANE_d2
+# comment: Taken from table 1 (they have factor -1 in definition, see eqn.(2); Q-range is guessed by us)
+# reference: arXiv:1805.08835
+# processType: D2
+# isNormalized: False
+# normalizationMethod: integral
+# normErr: 
+id,ps_def,h_1,proc_id,s,Q_min,Q_max,Q_avg,thFactor,xSec,uncorrErr_0,uncorrErr_1
+SANE_d2.0,1,1,100,9.697044,1.4142135623730951,1.8708286933869707,1.6733200530681511,-1.0,-0.00414,0.00205,0.00256
+SANE_d2.1,1,1,100,11.948244,1.8708286933869707,2.23606797749979,2.073644135332772,-1.0,-0.00149,0.00156,0.00368

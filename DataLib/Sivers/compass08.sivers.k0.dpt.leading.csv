@@ -1,0 +1,13 @@
+# name: compass08.sivers.k0.dpt.leading
+# comment: COMPASS SSA-Sivers k0 leading (differential in pt)
+# reference: 0802.2160
+# processType: SIDIS
+# isNormalized: False
+# normalizationMethod: integral
+# normErr: 
+id,ps_def,h_1,h_2,proc_id,ps_def_weight,h_1_weight,h_2_weight,proc_id_weight,s,Q_min,Q_max,Q_avg,x_min,x_max,z_min,z_max,pT_min,pT_max,M_target,M_product,includeCuts,cutParams_0,cutParams_1,cutParams_2,cutParams_3,thFactor,xSec,uncorrErr_0,x_avg,z_avg,pT_avg
+compass08.sivers.k0.dpt.leading.0,1,12,20,12001,1,12,20,2001,301.03984399999996,1.0,16.436057921533376,1.7691806012954132,0.03,1.0,0.25,1.0,0.1,0.35,0.938,0.494,True,0.1,0.9,25.0,10000.0,1.0,0.0026,0.0385,0.515,0.625,0.22499999999999998
+compass08.sivers.k0.dpt.leading.1,1,12,20,12001,1,12,20,2001,301.03984399999996,1.0,16.436057921533376,1.7916472867168918,0.03,1.0,0.25,1.0,0.35,0.55,0.938,0.494,True,0.1,0.9,25.0,10000.0,1.0,-0.0247,0.0399,0.515,0.625,0.45
+compass08.sivers.k0.dpt.leading.2,1,12,20,12001,1,12,20,2001,301.03984399999996,1.0,16.436057921533376,1.8027756377319946,0.03,1.0,0.25,1.0,0.55,0.75,0.938,0.494,True,0.1,0.9,25.0,10000.0,1.0,-0.0097,0.0442,0.515,0.625,0.65
+compass08.sivers.k0.dpt.leading.3,1,12,20,12001,1,12,20,2001,301.03984399999996,1.0,16.436057921533376,1.8138357147217055,0.03,1.0,0.25,1.0,0.75,1.0,0.938,0.494,True,0.1,0.9,25.0,10000.0,1.0,0.0007,0.0561,0.515,0.625,0.875
+compass08.sivers.k0.dpt.leading.4,1,12,20,12001,1,12,20,2001,301.03984399999996,1.0,16.436057921533376,1.91049731745428,0.03,1.0,0.25,1.0,1.0,10.0,0.938,0.494,True,0.1,0.9,25.0,10000.0,1.0,-0.1111,0.0701,0.515,0.625,5.5
