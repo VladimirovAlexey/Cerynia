@@ -6,9 +6,11 @@ A "point" is a row in a DataSet's DataFrame. This module defines:
   - REQUIRED      : required columns per process type
   - validate()    : fill defaults and check required columns
   - create()      : build a validated single-row DataFrame
+  - uncorrTotal() : combined uncorrelated error, sqrt(sum(uncorrErr_i**2))
   - schema()      : print a human-readable schema summary
 """
 
+import numpy as np
 import pandas as pd
 
 PROCESS_TYPES = ("DY", "SIDIS", "G2", "D2")
@@ -139,6 +141,33 @@ def create(processType, **kwargs):
             uncorrErr_0=0.05)
     """
     return validate(pd.DataFrame([kwargs]), processType)
+
+
+def uncorrTotal(point):
+    """
+    Combined uncorrelated error for one or more points: sqrt(sum(uncorrErr_i**2)).
+
+    Parameters
+    ----------
+    point : pandas.Series or pandas.DataFrame
+        A single point (e.g. df.iloc[i]) or a full points DataFrame
+        (vectorized over rows).
+
+    Returns
+    -------
+    float or pandas.Series
+        Combined uncorrelated error, matching the input type.
+    """
+    if isinstance(point, pd.DataFrame):
+        cols = [c for c in point.columns if c.startswith("uncorrErr_")]
+        if not cols:
+            return pd.Series(0.0, index=point.index)
+        return np.sqrt((point[cols] ** 2).sum(axis=1))
+    else:
+        cols = [c for c in point.index if c.startswith("uncorrErr_")]
+        if not cols:
+            return 0.0
+        return np.sqrt((point[cols].astype(float) ** 2).sum())
 
 
 def schema(processType):

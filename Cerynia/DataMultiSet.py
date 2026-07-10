@@ -103,6 +103,14 @@ class DataMultiSet:
             s.prepare()
         return self
 
+    def cut(self, func):
+        """
+        Apply the same cut to all constituent DataSets.
+        See DataSet.cut for the accepted forms of func.
+        Returns a new (unprepared) DataMultiSet.
+        """
+        return DataMultiSet([s.cut(func) for s in self._sets])
+
     # -- Internal --------------------------------------------------------------
 
     def _slice(self, vector, k):
