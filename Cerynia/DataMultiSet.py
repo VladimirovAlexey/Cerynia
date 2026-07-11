@@ -107,9 +107,20 @@ class DataMultiSet:
         """
         Apply the same cut to all constituent DataSets.
         See DataSet.cut for the accepted forms of func.
+        Sets left with zero points after the cut are dropped (with a printed
+        notice); raises ValueError if every set ends up empty.
         Returns a new (unprepared) DataMultiSet.
         """
-        return DataMultiSet([s.cut(func) for s in self._sets])
+        kept = []
+        for s in self._sets:
+            cutSet = s.cut(func)
+            if cutSet.numberOfPoints == 0:
+                print(f"DataMultiSet.cut: all points removed from set '{s.name}' -- dropped.")
+            else:
+                kept.append(cutSet)
+        if not kept:
+            raise ValueError("DataMultiSet.cut: all points removed from every set")
+        return DataMultiSet(kept)
 
     # -- Internal --------------------------------------------------------------
 

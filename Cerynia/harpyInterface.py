@@ -8,8 +8,9 @@ Handles all four process types by dispatching on data.processType:
     D2    — harpy.D2List         (evaluated at bin-center averages)
 
 Public API:
-    xsec(data, method)              — raw theory vector from harpy
-    chi2(data, method)              — xsec + match + chi2
+    xsec(data, method)              — matched theory vector from harpy (thFactor + normalization applied)
+    compute_weight(data, method)    — raw theory vector using weight_process columns (DY/SIDIS only)
+    chi2(data, method)              — xsec + chi2
     print_chi2_table(data, ...)     — formatted chi2/N table
     print_per_point_chi2(data, ...) — per-point diagonal chi2
 """
@@ -27,12 +28,18 @@ from .DataMultiSet import DataMultiSet
 def _process_list(df, processType):
     """Process code list per point.
     DY/SIDIS: [ps_def, h_1, h_2, proc_id]  (4 integers)
-    G2/D2:    [ps_def, h_1, proc_id]        (3 integers)
+    G2/D2:    [ps_def, h_1, proc_id]        (3 integers) (this is not yet implemented in snowflake)
     """
     if processType in ("DY", "SIDIS"):
         return df[["ps_def", "h_1", "h_2", "proc_id"]].values.tolist()
     else:
         return df[["ps_def", "h_1", "proc_id"]].values.tolist()
+
+def _process_list_weight(df, processType):
+    """Weight-process code list per point (DY/SIDIS ratio/asymmetry observables).
+    [ps_def_weight, h_1_weight, h_2_weight, proc_id_weight]  (4 integers)
+    """
+    return df[["ps_def_weight", "h_1_weight", "h_2_weight", "proc_id_weight"]].values.tolist()
 
 def _cutparams_list(df):
     return df[["cutParams_0", "cutParams_1", "cutParams_2", "cutParams_3"]].values.tolist()
@@ -47,10 +54,14 @@ def _zero_size_bins(df, col):
 
 # -- Core cross-section computation --------------------------------------------
 
-def _xsec_df(df, processType, method):
+def _xsec_df(df, processType, method, process_fn=_process_list):
     """
     Compute raw cross-sections for a flat DataFrame of points.
     Returns a numpy array of length len(df).
+
+    process_fn : function(df, processType) -> process code list, used for the
+                 DY/SIDIS branches only. Defaults to _process_list (the primary
+                 process); compute_weight() passes _process_list_weight instead.
     """
 
     # G2 and D2: always evaluated at bin-center averages, no bin-integration variants.
@@ -60,7 +71,8 @@ def _xsec_df(df, processType, method):
         return np.array(harpy.G2List(
             df["x_avg"].tolist(),
             df["Q_avg"].tolist(),
-            _process_list(df, processType),
+            df["proc_id"].tolist(),
+            #_process_list(df, processType),
         ))
 
     if processType == "D2":
@@ -68,7 +80,8 @@ def _xsec_df(df, processType, method):
             raise ValueError(f"D2 only supports method='default', got '{method}'")
         return np.array(harpy.D2List(
             df["Q_avg"].tolist(),
-            _process_list(df, processType),
+            df["proc_id"].tolist(),
+            #_process_list(df, processType),
         ))
 
     # DY and SIDIS: full bin-integrated methods.
@@ -77,7 +90,7 @@ def _xsec_df(df, processType, method):
 
         if processType == "DY":
             return np.array(harpy.DY.xSecList(
-                _process_list(df, processType),
+                process_fn(df, processType),
                 df["s"].tolist(),
                 df[["qT_min", "qT_max"]].values.tolist(),
                 df[["Q_min",  "Q_max" ]].values.tolist(),
@@ -89,7 +102,7 @@ def _xsec_df(df, processType, method):
 
         if processType == "SIDIS":
             return np.array(harpy.SIDIS.xSecList(
-                _process_list(df, processType),
+                process_fn(df, processType),
                 df["s"].tolist(),
                 df[["pT_min", "pT_max"]].values.tolist(),
                 df[["z_min",  "z_max" ]].values.tolist(),
@@ -106,7 +119,7 @@ def _xsec_df(df, processType, method):
         # (current artemide convention for point-like integration)
         if processType == "DY":
             return np.array(harpy.DY.xSecList(
-                _process_list(df, processType),
+                process_fn(df, processType),
                 df["s"].tolist(),
                 _zero_size_bins(df, "qT_avg"),
                 _zero_size_bins(df, "Q_avg"),
@@ -117,7 +130,7 @@ def _xsec_df(df, processType, method):
 
         if processType == "SIDIS":
             return np.array(harpy.SIDIS.xSecList(
-                _process_list(df, processType),
+                process_fn(df, processType),
                 df["s"].tolist(),
                 _zero_size_bins(df, "pT_avg"),
                 _zero_size_bins(df, "z_avg"),
@@ -138,13 +151,11 @@ def _xsec_df(df, processType, method):
 
 # -- Public API ----------------------------------------------------------------
 
-def xsec(data, method="default"):
+def xsec(data, method="default", weights=None):
     """
-    Compute raw cross-section / observable values from harpy.
+    Compute cross-section / observable values from harpy, matched to data
+    (thFactor and normalization applied via data.match()).
     Returns a flat numpy array of length data.numberOfPoints.
-
-    This is the RAW theory output — call data.match(result) afterwards to apply
-    thFactor and normalization before passing to chi2.
 
     method (DY / SIDIS):
         'default'        — full bin integration with qT partitioning
@@ -152,20 +163,28 @@ def xsec(data, method="default"):
         'central'        — evaluate at bin centers only (zero-size bins)
     method (G2 / D2):
         'default'        — evaluate at bin-center averages (x_avg, Q_avg)
+
+    weights : optional array-like of length data.numberOfPoints (e.g. the
+              output of compute_weight()). If given, the raw theory is divided
+              elementwise by weights before matching.
     """
     if not isinstance(data, (DataSet, DataMultiSet)):
         raise TypeError("data must be a DataSet or DataMultiSet")
-    return _xsec_df(data.df, data.processType, method)
+    result = _xsec_df(data.df, data.processType, method)
+    if weights is not None:
+        result = result / np.asarray(weights, dtype=float)
+    return data.match(result)
 
 
-def chi2(data, method="default"):
+def chi2(data, method="default", weights=None):
     """
-    Compute raw cross-sections, match to data, and evaluate chi2.
+    Compute matched theory and evaluate chi2.
     Returns (chi2_total, [chi2_per_set]).
     data must be prepared.
+
+    weights : see xsec().
     """
-    XX = xsec(data, method)
-    YY = data.match(XX)
+    YY = xsec(data, method, weights=weights)
 
     if isinstance(data, DataSet):
         result = data.chi2(YY)
@@ -173,20 +192,67 @@ def chi2(data, method="default"):
     return data.chi2(YY)
 
 
+def compute_weight(data, method="default"):
+    """
+    Compute the weight cross-section for each point, using the optional
+    ps_def_weight/h_1_weight/h_2_weight/proc_id_weight columns (DY/SIDIS
+    ratio/asymmetry observables) instead of the primary process columns.
+
+    Points with no weight process declared (columns absent, or NaN for that
+    row) get weight = 1. Only DY/SIDIS carry weight-process columns at all;
+    G2/D2 data always returns an all-ones array.
+
+    Uses a single batched harpy...xSecList call over the points that do have
+    a declared weight process. Returns a flat numpy array of length
+    data.numberOfPoints, aligned with data.df row order (same alignment as
+    xsec()/data.match()).
+    """
+    if not isinstance(data, (DataSet, DataMultiSet)):
+        raise TypeError("data must be a DataSet or DataMultiSet")
+
+    df     = data.df
+    weight = np.ones(len(df))
+
+    if data.processType not in ("DY", "SIDIS"):
+        return weight
+
+    weight_cols = ["ps_def_weight", "h_1_weight", "h_2_weight", "proc_id_weight"]
+    if not all(c in df.columns for c in weight_cols):
+        return weight
+
+    declared = df[weight_cols].notna().all(axis=1).values
+    if not declared.any():
+        return weight
+
+    weight[declared] = _xsec_df(
+        df.loc[declared].reset_index(drop=True), data.processType, method,
+        process_fn=_process_list_weight,
+    )
+    return weight
+
+
 # -- Diagnostic printing -------------------------------------------------------
 
-def print_chi2_table(data, method="default", decompose=False, sys_shift=True):
+def _fmt_num(value, width=10, decimals=3):
+    """Format a float into a fixed-width field; overflow becomes '#' * width."""
+    s = f"{value:.{decimals}f}"
+    if len(s) > width:
+        return "#" * width
+    return f"{s:>{width}}"
+
+
+def print_chi2_table(data, method="default", decompose=False, sys_shift=True, weights=None):
     """
     Compute and print a chi2/N summary table.
 
     method    : xsec computation method (see xsec())
     decompose : show chi_D^2/N (uncorrelated) and chi_L^2/N (correlated) separately
     sys_shift : show average systematic shift per set (in %)
+    weights   : see xsec().
     """
     t0 = time.time()
 
-    XX = xsec(data, method)
-    YY = data.match(XX)
+    YY = xsec(data, method, weights=weights)
 
     if isinstance(data, DataSet):
         sets       = [data]
@@ -206,13 +272,14 @@ def print_chi2_table(data, method="default", decompose=False, sys_shift=True):
     sep    = f"{'':-<{w}}-+-{'':->5}-+-"
     if decompose:
         header += f" {'chiD^2/N':>10} | {'chiL^2/N':>10} | {'chi^2/N':>10} |"
-        sep    += f"-{'':->10}-+-{'':->10}-+-{'':->10}-+-"
+        sep    += f"{'':->10}-+-{'':->10}-+-{'':->10}-+-"
     else:
         header += f" {'chi^2/N':>10} |"
-        sep    += f"-{'':->10}-+-"
+        sep    += f"{'':->10}-+-"
     if sys_shift:
         header += f" {'sys.shift%':>10} |"
-        sep    += f"-{'':->10}-+-"
+        sep    += f"{'':->10}-+-"
+    sep = sep[:-1]
 
     print(header)
     print(sep)
@@ -222,11 +289,11 @@ def print_chi2_table(data, method="default", decompose=False, sys_shift=True):
         line = f"{s.name:{w}} | {s.numberOfPoints:>5} |"
         if decompose:
             d = dec_list[i]
-            line += f" {d[0]/N:>10.3f} | {d[1]/N:>10.3f} | {d[2]/N:>10.3f} |"
+            line += f" {_fmt_num(d[0]/N)} | {_fmt_num(d[1]/N)} | {_fmt_num(d[2]/N)} |"
         else:
-            line += f" {chi2_list[i]/N:>10.3f} |"
+            line += f" {_fmt_num(chi2_list[i]/N)} |"
         if sys_shift:
-            line += f" {shift_list[i]*100:>10.3f} |"
+            line += f" {_fmt_num(shift_list[i]*100)} |"
         print(line)
 
     if len(sets) > 1:
@@ -236,23 +303,26 @@ def print_chi2_table(data, method="default", decompose=False, sys_shift=True):
         line = f"{'Total':{w}} | {data.numberOfPoints:>5} |"
         if decompose:
             totals = np.sum(dec_list, axis=0)
-            line += (f" {totals[0]/N_total:>10.3f} |"
-                     f" {totals[1]/N_total:>10.3f} |"
-                     f" {totals[2]/N_total:>10.3f} |")
+            line += (f" {_fmt_num(totals[0]/N_total)} |"
+                     f" {_fmt_num(totals[1]/N_total)} |"
+                     f" {_fmt_num(totals[2]/N_total)} |")
         else:
-            line += f" {chi2_total/N_total:>10.3f} |"
+            line += f" {_fmt_num(chi2_total/N_total)} |"
+        if sys_shift:
+            line += f" {'':>10} |"
         print(line)
 
-    print(f"Computation time: {dt:.2f} s")
+    print(f"Computation time: {dt:.4f} s")
 
 
-def print_per_point_chi2(data, method="default", min_chi2=0.):
+def print_per_point_chi2(data, method="default", min_chi2=0., weights=None):
     """
     Print the diagonal chi2 contribution per point (uncorrelated errors only).
     Points with chi2 < min_chi2 are suppressed.
+
+    weights : see xsec().
     """
-    XX = xsec(data, method)
-    YY = data.match(XX)
+    YY = xsec(data, method, weights=weights)
 
     if isinstance(data, DataSet):
         sets_and_theory = [(data, YY)]

@@ -221,7 +221,7 @@ class DataSet:
             else:
                 # bool-only interface — keep original row unchanged
                 rows = [row for include, (_, row) in zip(results, self.df.iterrows()) if include]
-            new_df = pd.DataFrame(rows)
+            new_df = pd.DataFrame(rows, columns=self.df.columns)
 
         return DataSet(
             df                  = new_df,

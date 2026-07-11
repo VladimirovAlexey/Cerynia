@@ -127,10 +127,13 @@ def _add_compass08_points(ds, rows, diff_var, h_2, z_fixed, m_product):
     for i, row in enumerate(rows):
         if diff_var == "x":
             x_bin, z_bin, pT_bin = (row[1], row[2]), z_fixed, PT_FIXED
+            x_avg, z_avg, pT_avg = row[0], row[5], row[6]
         elif diff_var == "z":
             x_bin, z_bin, pT_bin = X_FIXED, (row[1], row[2]), PT_FIXED
+            x_avg, z_avg, pT_avg = row[5], row[0], row[6]
         else:  # "pt"
             x_bin, z_bin, pT_bin = X_FIXED, z_fixed, (row[1], row[2])
+            x_avg, z_avg, pT_avg = row[5], row[6], row[0]
 
         Q_min, Q_max = Qbounds(x_bin[0], x_bin[1])
 
@@ -138,9 +141,9 @@ def _add_compass08_points(ds, rows, diff_var, h_2, z_fixed, m_product):
             id=f"{ds.name}.{i}", ps_def=ps_def, h_1=h_1, h_2=h_2, proc_id=proc_id,
             ps_def_weight=ps_def, h_1_weight=h_1, h_2_weight=h_2, proc_id_weight=proc_id_weight,
             s=s, Q_min=Q_min, Q_max=Q_max, Q_avg=sqrt(row[3]),
-            x_min=x_bin[0], x_max=x_bin[1],
-            z_min=z_bin[0], z_max=z_bin[1],
-            pT_min=pT_bin[0], pT_max=pT_bin[1],
+            x_min=x_bin[0], x_max=x_bin[1], x_avg=x_avg,
+            z_min=z_bin[0], z_max=z_bin[1], z_avg=z_avg,
+            pT_min=pT_bin[0], pT_max=pT_bin[1], pT_avg=pT_avg,
             M_target=M_proton, M_product=m_product,
             includeCuts=includeCuts,
             cutParams_0=cutParams[0], cutParams_1=cutParams[1],

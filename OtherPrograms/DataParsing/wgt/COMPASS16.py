@@ -66,7 +66,7 @@ matches the established ratio/asymmetry-observable convention).
 
 Datasets, 18 total (arXiv:1609.07374), each double-differential in Q (4
 windows: 1-2, 2-2.5, 2.5-4, 4-9 GeV) and the named variable:
-    compass16.wgt.{h+,h-}.{1<z<2,1<z,2<z}.{dpt,dx,dz}.dQ
+    compass16.wgt.{h+,h-}.{1<z<2,1<z,2<z}.{dpt,dx,dz}
 """
 
 import sys
@@ -182,97 +182,97 @@ def _add_compass16_alt_points(ds, path, var, z_bin, h_2):
 
 
 #%% -- h-, 1<z<2 (0.1<z<0.2)
-ds = DataSet.empty("SIDIS", name="compass16.wgt.h-.1<z<2.dpt.dQ", comment="COMPASS16 DSSA-A_LT h- from p, 0.1<z<0.2 (differential in pt, joined across 4 Q-windows)",
+ds = DataSet.empty("SIDIS", name="compass16.wgt.h-.1<z<2.dpt", comment="COMPASS16 DSSA-A_LT h- from p, 0.1<z<0.2 (differential in pt, joined across 4 Q-windows)",
                     reference="1609.07374", normErr=normErr, isNormalized=False)
 _add_compass16_alt_points(ds, path_to_data + "Zgt01ls02_hm_pt_ALT_cosHmS.dat", "pt", (0.1, 0.2), -12)
 ds.save_csv(path_to_save + ds.name + ".csv")
 
-ds = DataSet.empty("SIDIS", name="compass16.wgt.h-.1<z<2.dx.dQ", comment="COMPASS16 DSSA-A_LT h- from p, 0.1<z<0.2 (differential in x, joined across 4 Q-windows)",
+ds = DataSet.empty("SIDIS", name="compass16.wgt.h-.1<z<2.dx", comment="COMPASS16 DSSA-A_LT h- from p, 0.1<z<0.2 (differential in x, joined across 4 Q-windows)",
                     reference="1609.07374", normErr=normErr, isNormalized=False)
 _add_compass16_alt_points(ds, path_to_data + "Zgt01ls02_hm_x_ALT_cosHmS.dat", "x", (0.1, 0.2), -12)
 ds.save_csv(path_to_save + ds.name + ".csv")
 
-ds = DataSet.empty("SIDIS", name="compass16.wgt.h-.1<z<2.dz.dQ", comment="COMPASS16 DSSA-A_LT h- from p, 0.1<z<0.2 (differential in z, joined across 4 Q-windows)",
+ds = DataSet.empty("SIDIS", name="compass16.wgt.h-.1<z<2.dz", comment="COMPASS16 DSSA-A_LT h- from p, 0.1<z<0.2 (differential in z, joined across 4 Q-windows)",
                     reference="1609.07374", normErr=normErr, isNormalized=False)
 _add_compass16_alt_points(ds, path_to_data + "Zgt01ls02_hm_z_ALT_cosHmS.dat", "z", (0.1, 0.2), -12)
 ds.save_csv(path_to_save + ds.name + ".csv")
 
 #%% -- h-, 1<z (z>0.1)
-ds = DataSet.empty("SIDIS", name="compass16.wgt.h-.1<z.dpt.dQ", comment="COMPASS16 DSSA-A_LT h- from p, z>0.1 (differential in pt, joined across 4 Q-windows)",
+ds = DataSet.empty("SIDIS", name="compass16.wgt.h-.1<z.dpt", comment="COMPASS16 DSSA-A_LT h- from p, z>0.1 (differential in pt, joined across 4 Q-windows)",
                     reference="1609.07374", normErr=normErr, isNormalized=False)
 _add_compass16_alt_points(ds, path_to_data + "Zgt01_hm_pt_ALT_cosHmS.dat", "pt", (0.1, 1.), -12)
 ds.save_csv(path_to_save + ds.name + ".csv")
 
-ds = DataSet.empty("SIDIS", name="compass16.wgt.h-.1<z.dx.dQ", comment="COMPASS16 DSSA-A_LT h- from p, z>0.1 (differential in x, joined across 4 Q-windows)",
+ds = DataSet.empty("SIDIS", name="compass16.wgt.h-.1<z.dx", comment="COMPASS16 DSSA-A_LT h- from p, z>0.1 (differential in x, joined across 4 Q-windows)",
                     reference="1609.07374", normErr=normErr, isNormalized=False)
 _add_compass16_alt_points(ds, path_to_data + "Zgt01_hm_x_ALT_cosHmS.dat", "x", (0.1, 1.), -12)
 ds.save_csv(path_to_save + ds.name + ".csv")
 
-ds = DataSet.empty("SIDIS", name="compass16.wgt.h-.1<z.dz.dQ", comment="COMPASS16 DSSA-A_LT h- from p, z>0.1 (differential in z, joined across 4 Q-windows)",
+ds = DataSet.empty("SIDIS", name="compass16.wgt.h-.1<z.dz", comment="COMPASS16 DSSA-A_LT h- from p, z>0.1 (differential in z, joined across 4 Q-windows)",
                     reference="1609.07374", normErr=normErr, isNormalized=False)
 _add_compass16_alt_points(ds, path_to_data + "Zgt01_hm_z_ALT_cosHmS.dat", "z", (0.1, 1.), -12)
 ds.save_csv(path_to_save + ds.name + ".csv")
 
 #%% -- h-, 2<z (z>0.2)
-ds = DataSet.empty("SIDIS", name="compass16.wgt.h-.2<z.dpt.dQ", comment="COMPASS16 DSSA-A_LT h- from p, z>0.2 (differential in pt, joined across 4 Q-windows)",
+ds = DataSet.empty("SIDIS", name="compass16.wgt.h-.2<z.dpt", comment="COMPASS16 DSSA-A_LT h- from p, z>0.2 (differential in pt, joined across 4 Q-windows)",
                     reference="1609.07374", normErr=normErr, isNormalized=False)
 _add_compass16_alt_points(ds, path_to_data + "Zgt02_hm_pt_ALT_cosHmS.dat", "pt", (0.2, 1.), -12)
 ds.save_csv(path_to_save + ds.name + ".csv")
 
-ds = DataSet.empty("SIDIS", name="compass16.wgt.h-.2<z.dx.dQ", comment="COMPASS16 DSSA-A_LT h- from p, z>0.2 (differential in x, joined across 4 Q-windows)",
+ds = DataSet.empty("SIDIS", name="compass16.wgt.h-.2<z.dx", comment="COMPASS16 DSSA-A_LT h- from p, z>0.2 (differential in x, joined across 4 Q-windows)",
                     reference="1609.07374", normErr=normErr, isNormalized=False)
 _add_compass16_alt_points(ds, path_to_data + "Zgt02_hm_x_ALT_cosHmS.dat", "x", (0.2, 1.), -12)
 ds.save_csv(path_to_save + ds.name + ".csv")
 
-ds = DataSet.empty("SIDIS", name="compass16.wgt.h-.2<z.dz.dQ", comment="COMPASS16 DSSA-A_LT h- from p, z>0.2 (differential in z, joined across 4 Q-windows)",
+ds = DataSet.empty("SIDIS", name="compass16.wgt.h-.2<z.dz", comment="COMPASS16 DSSA-A_LT h- from p, z>0.2 (differential in z, joined across 4 Q-windows)",
                     reference="1609.07374", normErr=normErr, isNormalized=False)
 _add_compass16_alt_points(ds, path_to_data + "Zgt02_hm_z_ALT_cosHmS.dat", "z", (0.2, 1.), -12)
 ds.save_csv(path_to_save + ds.name + ".csv")
 
 #%% -- h+, 1<z<2 (0.1<z<0.2)
-ds = DataSet.empty("SIDIS", name="compass16.wgt.h+.1<z<2.dpt.dQ", comment="COMPASS16 DSSA-A_LT h+ from p, 0.1<z<0.2 (differential in pt, joined across 4 Q-windows)",
+ds = DataSet.empty("SIDIS", name="compass16.wgt.h+.1<z<2.dpt", comment="COMPASS16 DSSA-A_LT h+ from p, 0.1<z<0.2 (differential in pt, joined across 4 Q-windows)",
                     reference="1609.07374", normErr=normErr, isNormalized=False)
 _add_compass16_alt_points(ds, path_to_data + "Zgt01ls02_hp_pt_ALT_cosHmS.dat", "pt", (0.1, 0.2), 12)
 ds.save_csv(path_to_save + ds.name + ".csv")
 
-ds = DataSet.empty("SIDIS", name="compass16.wgt.h+.1<z<2.dx.dQ", comment="COMPASS16 DSSA-A_LT h+ from p, 0.1<z<0.2 (differential in x, joined across 4 Q-windows)",
+ds = DataSet.empty("SIDIS", name="compass16.wgt.h+.1<z<2.dx", comment="COMPASS16 DSSA-A_LT h+ from p, 0.1<z<0.2 (differential in x, joined across 4 Q-windows)",
                     reference="1609.07374", normErr=normErr, isNormalized=False)
 _add_compass16_alt_points(ds, path_to_data + "Zgt01ls02_hp_x_ALT_cosHmS.dat", "x", (0.1, 0.2), 12)
 ds.save_csv(path_to_save + ds.name + ".csv")
 
-ds = DataSet.empty("SIDIS", name="compass16.wgt.h+.1<z<2.dz.dQ", comment="COMPASS16 DSSA-A_LT h+ from p, 0.1<z<0.2 (differential in z, joined across 4 Q-windows)",
+ds = DataSet.empty("SIDIS", name="compass16.wgt.h+.1<z<2.dz", comment="COMPASS16 DSSA-A_LT h+ from p, 0.1<z<0.2 (differential in z, joined across 4 Q-windows)",
                     reference="1609.07374", normErr=normErr, isNormalized=False)
 _add_compass16_alt_points(ds, path_to_data + "Zgt01ls02_hp_z_ALT_cosHmS.dat", "z", (0.1, 0.2), 12)
 ds.save_csv(path_to_save + ds.name + ".csv")
 
 #%% -- h+, 1<z (z>0.1)
-ds = DataSet.empty("SIDIS", name="compass16.wgt.h+.1<z.dpt.dQ", comment="COMPASS16 DSSA-A_LT h+ from p, z>0.1 (differential in pt, joined across 4 Q-windows)",
+ds = DataSet.empty("SIDIS", name="compass16.wgt.h+.1<z.dpt", comment="COMPASS16 DSSA-A_LT h+ from p, z>0.1 (differential in pt, joined across 4 Q-windows)",
                     reference="1609.07374", normErr=normErr, isNormalized=False)
 _add_compass16_alt_points(ds, path_to_data + "Zgt01_hp_pt_ALT_cosHmS.dat", "pt", (0.1, 1.), 12)
 ds.save_csv(path_to_save + ds.name + ".csv")
 
-ds = DataSet.empty("SIDIS", name="compass16.wgt.h+.1<z.dx.dQ", comment="COMPASS16 DSSA-A_LT h+ from p, z>0.1 (differential in x, joined across 4 Q-windows)",
+ds = DataSet.empty("SIDIS", name="compass16.wgt.h+.1<z.dx", comment="COMPASS16 DSSA-A_LT h+ from p, z>0.1 (differential in x, joined across 4 Q-windows)",
                     reference="1609.07374", normErr=normErr, isNormalized=False)
 _add_compass16_alt_points(ds, path_to_data + "Zgt01_hp_x_ALT_cosHmS.dat", "x", (0.1, 1.), 12)
 ds.save_csv(path_to_save + ds.name + ".csv")
 
-ds = DataSet.empty("SIDIS", name="compass16.wgt.h+.1<z.dz.dQ", comment="COMPASS16 DSSA-A_LT h+ from p, z>0.1 (differential in z, joined across 4 Q-windows)",
+ds = DataSet.empty("SIDIS", name="compass16.wgt.h+.1<z.dz", comment="COMPASS16 DSSA-A_LT h+ from p, z>0.1 (differential in z, joined across 4 Q-windows)",
                     reference="1609.07374", normErr=normErr, isNormalized=False)
 _add_compass16_alt_points(ds, path_to_data + "Zgt01_hp_z_ALT_cosHmS.dat", "z", (0.1, 1.), 12)
 ds.save_csv(path_to_save + ds.name + ".csv")
 
 #%% -- h+, 2<z (z>0.2)
-ds = DataSet.empty("SIDIS", name="compass16.wgt.h+.2<z.dpt.dQ", comment="COMPASS16 DSSA-A_LT h+ from p, z>0.2 (differential in pt, joined across 4 Q-windows)",
+ds = DataSet.empty("SIDIS", name="compass16.wgt.h+.2<z.dpt", comment="COMPASS16 DSSA-A_LT h+ from p, z>0.2 (differential in pt, joined across 4 Q-windows)",
                     reference="1609.07374", normErr=normErr, isNormalized=False)
 _add_compass16_alt_points(ds, path_to_data + "Zgt02_hp_pt_ALT_cosHmS.dat", "pt", (0.2, 1.), 12)
 ds.save_csv(path_to_save + ds.name + ".csv")
 
-ds = DataSet.empty("SIDIS", name="compass16.wgt.h+.2<z.dx.dQ", comment="COMPASS16 DSSA-A_LT h+ from p, z>0.2 (differential in x, joined across 4 Q-windows)",
+ds = DataSet.empty("SIDIS", name="compass16.wgt.h+.2<z.dx", comment="COMPASS16 DSSA-A_LT h+ from p, z>0.2 (differential in x, joined across 4 Q-windows)",
                     reference="1609.07374", normErr=normErr, isNormalized=False)
 _add_compass16_alt_points(ds, path_to_data + "Zgt02_hp_x_ALT_cosHmS.dat", "x", (0.2, 1.), 12)
 ds.save_csv(path_to_save + ds.name + ".csv")
 
-ds = DataSet.empty("SIDIS", name="compass16.wgt.h+.2<z.dz.dQ", comment="COMPASS16 DSSA-A_LT h+ from p, z>0.2 (differential in z, joined across 4 Q-windows)",
+ds = DataSet.empty("SIDIS", name="compass16.wgt.h+.2<z.dz", comment="COMPASS16 DSSA-A_LT h+ from p, z>0.2 (differential in z, joined across 4 Q-windows)",
                     reference="1609.07374", normErr=normErr, isNormalized=False)
 _add_compass16_alt_points(ds, path_to_data + "Zgt02_hp_z_ALT_cosHmS.dat", "z", (0.2, 1.), 12)
 ds.save_csv(path_to_save + ds.name + ".csv")
