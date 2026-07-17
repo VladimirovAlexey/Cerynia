@@ -10,9 +10,11 @@ Construction:
     multi = set1 + set2 + set3          # requires __add__ on DataSet
 
 Access:
-    multi[0]        # by index
-    multi["CDF"]    # by name
+    multi[0]        # by index -> DataSet
+    multi["CDF"]    # by name -> DataSet
     multi[0:2]      # slice → new DataMultiSet
+    multi.point(5)          # global flat index -> one-point DataSet
+    multi.point("CDF_003")  # by point id -> one-point DataSet
 
 Typical usage:
     multi = DataMultiSet([dy_set1, dy_set2])
@@ -121,6 +123,33 @@ class DataMultiSet:
         if not kept:
             raise ValueError("DataMultiSet.cut: all points removed from every set")
         return DataMultiSet(kept)
+
+    def point(self, selector):
+        """
+        Return a one-point DataSet extracted from whichever constituent set
+        contains the point.
+
+        selector : int global position across the flat (concatenated) point
+                   order used by match()/chi2() (negative indices allowed),
+                   or a str matching a point 'id' (searched across all sets;
+                   the first matching set is used).
+        """
+        if isinstance(selector, str):
+            for s in self._sets:
+                if (s.df["id"] == selector).any():
+                    return s.point(selector)
+            raise KeyError(f"No point with id={selector!r} in DataMultiSet")
+
+        if selector < 0:
+            selector += self.numberOfPoints
+        if not (0 <= selector < self.numberOfPoints):
+            raise IndexError(
+                f"point index out of range for DataMultiSet with {self.numberOfPoints} points"
+            )
+
+        for k in range(len(self._sets)):
+            if self._i1[k] <= selector < self._i2[k]:
+                return self._sets[k].point(selector - self._i1[k])
 
     # -- Internal --------------------------------------------------------------
 

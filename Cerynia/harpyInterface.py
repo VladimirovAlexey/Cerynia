@@ -51,6 +51,15 @@ def _zero_size_bins(df, col):
     """Zero-size bin [[v, v], ...] for 'central' method evaluation at bin centers."""
     return [[v, v] for v in df[col]]
 
+def _semi_central_bins(df, var, threshold):
+    """
+    Per-point bin for 'semiCentral' method: [min, max] if the bin is wider
+    than threshold, otherwise the zero-size bin [avg, avg].
+    """
+    lo, hi, avg = df[f"{var}_min"], df[f"{var}_max"], df[f"{var}_avg"]
+    wide = (hi - lo) > threshold
+    return [[l, h] if w else [a, a] for w, l, h, a in zip(wide, lo, hi, avg)]
+
 
 # -- Core cross-section computation --------------------------------------------
 
@@ -126,6 +135,7 @@ def _xsec_df(df, processType, method, process_fn=_process_list):
                 _zero_size_bins(df, "y_avg"),
                 df["includeCuts"].tolist(),
                 _cutparams_list(df),
+                False,
             ))
 
         if processType == "SIDIS":
@@ -142,10 +152,41 @@ def _xsec_df(df, processType, method, process_fn=_process_list):
                 False,
             ))
 
+    if method == "semiCentral":
+        # y (DY) / x, z (SIDIS) always at zero-size [avg, avg] bins.
+        # qT (DY) / pT (SIDIS): [min, max] if wider than 4 GeV, else [avg, avg].
+        # Q: [min, max] if wider than 5 GeV, else [avg, avg].
+        if processType == "DY":
+            return np.array(harpy.DY.xSecList(
+                process_fn(df, processType),
+                df["s"].tolist(),
+                _semi_central_bins(df, "qT", 4.0),
+                _semi_central_bins(df, "Q", 5.0),
+                #_zero_size_bins(df, "y_avg"),
+                _semi_central_bins(df, "y", 2.0),
+                df["includeCuts"].tolist(),
+                _cutparams_list(df),
+                False,
+            ))
+
+        if processType == "SIDIS":
+            return np.array(harpy.SIDIS.xSecList(
+                process_fn(df, processType),
+                df["s"].tolist(),
+                _semi_central_bins(df, "pT", 4.0),
+                _zero_size_bins(df, "z_avg"),
+                _zero_size_bins(df, "x_avg"),
+                _semi_central_bins(df, "Q", 5.0),
+                [False] * len(df),
+                _cutparams_list(df),
+                _masses_list(df),
+                False,
+            ))
+
     raise ValueError(
         f"processType='{processType}', method='{method}': "
-        "valid methods are 'default', 'noPartitioning', 'central' (DY/SIDIS) "
-        "or 'default' (G2/D2)."
+        "valid methods are 'default', 'noPartitioning', 'central', 'semiCentral' "
+        "(DY/SIDIS) or 'default' (G2/D2)."
     )
 
 
@@ -161,6 +202,9 @@ def xsec(data, method="default", weights=None):
         'default'        — full bin integration with qT partitioning
         'noPartitioning' — full bin integration without partitioning
         'central'        — evaluate at bin centers only (zero-size bins)
+        'semiCentral'    — like 'central', but qT/pT and Q use the real
+                            [min, max] bin edges instead of [avg, avg]
+                            when the bin is wide (qT/pT > 4 GeV, Q > 5 GeV, y>2)
     method (G2 / D2):
         'default'        — evaluate at bin-center averages (x_avg, Q_avg)
 

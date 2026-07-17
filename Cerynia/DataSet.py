@@ -234,6 +234,22 @@ class DataSet:
             normalizationMethod = self.normalizationMethod,
         )
 
+    def point(self, selector):
+        """
+        Return a one-point DataSet.
+
+        selector : int position (as in df.iloc, negative indices allowed)
+                   or a str matching the 'id' column.
+        """
+        if isinstance(selector, str):
+            mask = self.df["id"] == selector
+            if not mask.any():
+                raise KeyError(f"No point with id={selector!r} in DataSet '{self.name}'")
+            return self.cut(mask)
+
+        label = self.df.index[selector]
+        return self.cut(self.df.index == label)
+
     # -- Theory matching -------------------------------------------------------
 
     def match(self, theory):

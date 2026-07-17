@@ -1,0 +1,11 @@
+# name: CDF1-example
+# comment: A minimal hand-made subset of CDF1, for demonstration only
+# reference: hep-ex/0001021
+# processType: DY
+# isNormalized: False
+# normalizationMethod: integral
+# normErr: 0.039
+id,ps_def,h_1,h_2,proc_id,s,Q_min,Q_max,y_min,y_max,qT_min,qT_max,thFactor,includeCuts,xSec,uncorrErr_0,Q_avg,y_avg,qT_avg,cutParams_0,cutParams_1,cutParams_2,cutParams_3
+CDF1-example.0,1,1,-1,3,3240000.0,66.0,116.0,-10.0,10.0,0.0,0.5,1000.0,False,3.35,0.54,91.0,0.0,0.25,0.0,0.0,-100.0,100.0
+CDF1-example.1,1,1,-1,3,3240000.0,66.0,116.0,-10.0,10.0,0.5,1.0,1000.0,False,10.1,1.0,91.0,0.0,0.75,0.0,0.0,-100.0,100.0
+CDF1-example.2,1,1,-1,3,3240000.0,66.0,116.0,-10.0,10.0,1.0,1.5,1000.0,False,14.8,1.2,91.0,0.0,1.25,0.0,0.0,-100.0,100.0

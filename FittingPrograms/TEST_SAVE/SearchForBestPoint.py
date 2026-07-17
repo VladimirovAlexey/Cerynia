@@ -185,58 +185,153 @@ Cerynia.harpyInterface.print_chi2_table(setDY,sys_shift=False,method="semiCentra
 Cerynia.harpyInterface.print_chi2_table(setSIDIS,sys_shift=False,method="semiCentral")
 
 #%%
-import pickle
-
-with open(THIS_DIR+"/RESULT_2/"+"ART25","rb") as f:  # Python 3: open(..., 'rb')
-    Y1,Y2 = pickle.load(f)
+def searchBestPointDY(ss,f0,tol):
+    vMIN=ss.df['qT_min'][0]
+    vMAX=ss.df['qT_max'][0]
+    print(vMIN,",",vMAX)
+    num=int(1./tol)
+    delta=(vMAX-vMIN)/2/num
+    v=ss.df['qT_avg'][0]
+    fc=Cerynia.harpyInterface.xsec(ss,method="semiCentral")[0]-f0
+    sign=+1 if fc>0 else -1
+    toPOS=True
+    toNEG=True
     
-X1=Cerynia.harpyInterface.xsec(setDY)
-X2=Cerynia.harpyInterface.xsec(setSIDIS)
-
-print((numpy.array(X1)-numpy.array(Y1))/numpy.array(X1))
-print((numpy.array(X2)-numpy.array(Y2))/numpy.array(X2))
-
-#%%
-import pickle
-ver="/RESULT_3/"
-
-X1=Cerynia.harpyInterface.xsec(setDY)
-X2=Cerynia.harpyInterface.xsec(setSIDIS)
-
-# Saving the objects:
-with open(THIS_DIR+ver+"ART25", 'wb') as f:  # Python 3: open(..., 'wb')
-    pickle.dump([X1,X2], f)
-
-#%%
-import time
-tt=[]
-for i in range(25):
-    t1=time.time()
-    
-    rSet.set(2*i+1)
-    
-    t2=time.time()
-    print("Update time =", t2-t1)
-    tt.append(t2-t1)
-print("Avarage time of update:",numpy.mean(tt))
-
-rSet.set(0)
-#%%
-import time
-### Also save couple of replicas.
-tt=[]
-for i in [5,10,25,100]:
-    t1=time.time()
-    rSet.set(i)
-     
-    X1=Cerynia.harpyInterface.xsec(setDY)
-    X2=Cerynia.harpyInterface.xsec(setSIDIS)
-    
-    t2=time.time()
-    print("Update time =", t2-t1)
-    tt.append(t2-t1)
-    
-    with open(THIS_DIR+ver+"ART25_rep"+str(i), 'wb') as f:  # Python 3: open(..., 'wb')
-        pickle.dump([X1,X2], f)
+    for i in range(num):
+        if(toPOS): 
+            ss.df.loc[0,"qT_avg"]=v+delta
+            fpos=sign*(Cerynia.harpyInterface.xsec(ss,method="semiCentral")[0]-f0)
+        if(toNEG): 
+            ss.df.loc[0,"qT_avg"]=v-delta
+            fneg=sign*(Cerynia.harpyInterface.xsec(ss,method="semiCentral")[0]-f0)
         
-print("Avarage time of computation:",numpy.mean(tt))
+        print(i,":",v,"{",fneg,",",fc,",",fpos,"}")
+        
+        if(fpos>0 and fneg>0):
+            if(fpos<fneg):
+                ### step to positive direction
+                v=v+delta
+                toPOS=True
+                toNEG=False                
+                fneg,fc=fc,fpos
+            else:
+                ### step to negative direction
+                v=v-delta
+                toPOS=False
+                toNEG=True
+                fpos,fc=fc,fneg
+            
+        elif(fneg<0):
+            v=v-delta*fc/(fc-fneg)
+            break
+        elif(fpos<0):
+            v=v+delta*fc/(fc-fpos)
+            break
+        
+        if(i==num-1): raise Exception("AAA")
+        
+    return v
+#%%
+import numpy as np
+
+def searchBestPoint(ss,ls,tol):
+    
+    v=np.array([ss.df[r+"_avg"][0] for r in ls])
+    num=int(1./tol)
+    delta=np.array([(ss.df[r+"_max"][0]-ss.df[r+"_min"][0]) for r in ls])/2/num
+    
+    if(len(ls)==1):
+        vec=np.array([[+1],[-1]])
+        kvec=[ls[0]+"_avg",ls[0]+"_avg"]
+        ivec=[0,0]
+    elif(len(ls)==2):
+        vec=np.array([[+1,0],[-1,0],[0,+1],[0,-1]])
+        kvec=[ls[0]+"_avg",ls[0]+"_avg",ls[1]+"_avg",ls[1]+"_avg"]
+        ivec=[0,0,1,1]
+    elif(len(ls)==3):
+        vec=np.array([[+1,0,0],[-1,0,0],[0,+1,0],[0,-1,0],[0,0,+1],[0,0,-1]])
+        kvec=[ls[0]+"_avg",ls[0]+"_avg",ls[1]+"_avg",ls[1]+"_avg",ls[2]+"_avg",ls[2]+"_avg"]
+        ivec=[0,0,1,1,2,2]
+    elif(len(ls)==4):
+        vec=np.array([[+1,0,0,0],[-1,0,0,0],[0,+1,0,0],[0,-1,0,0],[0,0,+1,0],[0,0,-1,0],[0,0,0,+1],[0,0,0,-1]])
+        kvec=[ls[0]+"_avg",ls[0]+"_avg",ls[1]+"_avg",ls[1]+"_avg",ls[2]+"_avg",ls[2]+"_avg",ls[3]+"_avg",ls[3]+"_avg"]
+        ivec=[0,0,1,1,2,2,3,3]
+    else:
+        raise Exception("Only cases upt to 4 are made")
+        
+    f0=Cerynia.harpyInterface.xsec(ss)[0]
+    fc=Cerynia.harpyInterface.xsec(ss,method="semiCentral")[0]-f0
+    
+    sign=+1 if fc>0 else -1
+    fc=sign*fc
+    
+    print(v,":",fc)
+    for i in range(num):
+        #### compute all values around given
+        fMIN=fc
+        jMIN=-1
+        for j in range(len(vec)):
+            ss.df.loc[0,kvec[j]]=(v+delta*vec[j])[ivec[j]]
+            fCUR=sign*(Cerynia.harpyInterface.xsec(ss,method="semiCentral")[0]-f0)
+            if(fCUR<0):
+                jMIN=j
+                fMIN=fCUR
+                break
+            elif(fCUR<fMIN):
+                jMIN=j
+                fMIN=fCUR
+        
+        ###
+        if(jMIN==-1): raise Exception("THERE IS NO DESCEND!")
+            
+        #### now we know the direction of best case.
+        #### Maby it already the zero
+        if(fMIN<0):
+            v=v-delta*vec[jMIN]*fc/(fMIN-fc)
+            for j in range(len(ls)): ss.df.loc[0,kvec[2*j]]=v[j]
+            return ss
+        else:
+            #### go to next iteration
+            v=v+delta*vec[jMIN]
+            fc=fMIN
+            for j in range(len(ls)): ss.df.loc[0,kvec[2*j]]=v[j]
+            
+            print(v,":",fc)
+            
+        #if(i==num-1): raise Exception("AAA")
+        if(i==num-1): print("DOES NOT FINISHED")
+        
+    return ss
+        
+#%%
+SS=setDY.point(1)
+X1=Cerynia.harpyInterface.xsec(SS)
+W=searchBestPointDY(SS,X1[0],0.1)
+SS.df.loc[0,"qT_avg"]=W
+X1=Cerynia.harpyInterface.xsec(SS)
+X2=Cerynia.harpyInterface.xsec(SS,method="semiCentral")
+print("{",SS.df['qT_avg'][0],",",X1[0],",",X2[0],"},")
+
+#%%
+SS=setDY.point(300)
+W=searchBestPoint(SS,["qT","y"],0.1)
+#SS.df.loc[0,"qT_avg"]=W
+X1=Cerynia.harpyInterface.xsec(W)
+X2=Cerynia.harpyInterface.xsec(W,method="semiCentral")
+print("{",W.df['qT_avg'][0],",",W.df['y_avg'][0],",",X1[0],",",X2[0],"},")
+
+#%%
+SS=setSIDIS.point(200)
+W=searchBestPoint(SS,["pT","x","z","Q"],0.01)
+#SS.df.loc[0,"qT_avg"]=W
+X1=Cerynia.harpyInterface.xsec(W)
+X2=Cerynia.harpyInterface.xsec(W,method="semiCentral")
+print("{ (",W.df['pT_avg'][0],",",W.df['x_avg'][0],",",W.df['z_avg'][0],",",W.df['Q_avg'][0],"),",X1[0],",",X2[0],"},")
+#%%
+SS=setDY.point(300)
+for i in range(10):
+        SS.df.loc[0,"qT_avg"]=SS.df['qT_min'][0]+i*(SS.df['qT_max'][0]-SS.df['qT_min'][0])/10.
+        X1=Cerynia.harpyInterface.xsec(SS)
+        X2=Cerynia.harpyInterface.xsec(SS,method="semiCentral")
+        print("{",SS.df['qT_avg'][0],",",SS.df['y_avg'][0],",",X1[0],",",X2[0],"},")
+        
